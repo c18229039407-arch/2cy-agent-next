@@ -153,9 +153,9 @@ export const dict = {
   "ui.common.next": "下一步",
   "ui.common.submit": "提交",
 
-  "ui.permission.deny": "拒绝",
-  "ui.permission.allowAlways": "始终允许",
-  "ui.permission.allowOnce": "允许一次",
+  "ui.permission.deny": "不行",
+  "ui.permission.allowAlways": "全权委托",
+  "ui.permission.allowOnce": "准",
 
   "ui.message.expand": "展开消息",
   "ui.message.collapse": "收起消息",

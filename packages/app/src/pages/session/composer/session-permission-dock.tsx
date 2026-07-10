@@ -34,18 +34,32 @@ export function SessionPermissionDock(props: {
         <>
           <div />
           <div data-slot="permission-footer-actions">
-            <Button variant="ghost" size="normal" onClick={() => props.onDecide("reject")} disabled={props.responding}>
+            {/* 2CY: 朱红印章按钮（k-seal 样式来自 @2cy/theme） */}
+            <Button
+              variant="ghost"
+              size="normal"
+              class="k-seal k-seal--deny"
+              onClick={() => props.onDecide("reject")}
+              disabled={props.responding}
+            >
               {language.t("ui.permission.deny")}
             </Button>
             <Button
               variant="secondary"
               size="normal"
+              class="k-seal"
               onClick={() => props.onDecide("always")}
               disabled={props.responding}
             >
               {language.t("ui.permission.allowAlways")}
             </Button>
-            <Button variant="primary" size="normal" onClick={() => props.onDecide("once")} disabled={props.responding}>
+            <Button
+              variant="primary"
+              size="normal"
+              class="k-seal"
+              onClick={() => props.onDecide("once")}
+              disabled={props.responding}
+            >
               {language.t("ui.permission.allowOnce")}
             </Button>
           </div>
