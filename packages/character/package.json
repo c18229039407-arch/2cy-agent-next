@@ -1,0 +1,14 @@
+{
+  "name": "@2cy/character",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "2CY: 角色卡与人设外壳——persona 编译、.2cy.json 兼容导入导出",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "zod": "catalog:",
+    "@2cy/plugin": "workspace:*"
+  }
+}

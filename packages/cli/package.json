@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@2cy/cli",
+  "version": "1.17.15",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "lildax": "./bin/lildax.cjs"
+  },
+  "files": [
+    "bin"
+  ],
+  "scripts": {
+    "build": "bun run script/build.ts",
+    "dev": "bun run src/index.ts",
+    "typecheck": "tsgo --noEmit"
+  },
+  "dependencies": {
+    "@effect/platform-node": "catalog:",
+    "@2cy/core": "workspace:*",
+    "@2cy/sdk": "workspace:*",
+    "@2cy/server": "workspace:*",
+    "@2cy/tui": "workspace:*",
+    "@opentui/core": "catalog:",
+    "@opentui/solid": "catalog:",
+    "@parcel/watcher": "2.5.1",
+    "effect": "catalog:",
+    "solid-js": "catalog:"
+  },
+  "devDependencies": {
+    "@2cy/script": "workspace:*",
+    "@tsconfig/bun": "catalog:",
+    "@types/bun": "catalog:",
+    "@typescript/native-preview": "catalog:"
+  }
+}

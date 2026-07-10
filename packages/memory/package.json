@@ -1,0 +1,9 @@
+{
+  "name": "@2cy/memory",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "2CY: 长期记忆与用户画像——remember 插件工具、<memory> 区块编译",
+  "exports": { "./*": "./src/*.ts" },
+  "dependencies": { "@2cy/plugin": "workspace:*" }
+}

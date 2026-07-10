@@ -1,0 +1,95 @@
+/* 2CY: 手绘墨线组件层 —— 叠在 packages/app/src/index.css 之后加载。
+   命名约定：全部以 .k- 前缀（koma，分镜格），避免与上游类名碰撞。 */
+
+
+/* 方眼稿纸底纹：铺在应用根容器 */
+.k-desk {
+  background-color: var(--2cy-paper);
+  background-image:
+    linear-gradient(var(--2cy-manuscript-blue) 1px, transparent 1px),
+    linear-gradient(90deg, var(--2cy-manuscript-blue) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+}
+
+/* 分镜格：会话中每个工具步骤/消息卡片 */
+.k-panel {
+  background: var(--2cy-paper);
+  color: var(--2cy-ink);
+  border: 2px solid var(--2cy-ink);
+  border-radius: var(--2cy-r-wobble-a);
+  padding: var(--2cy-pad-panel);
+  box-shadow: 3px 3px 0 var(--2cy-ink);
+}
+.k-panel:nth-child(2n) { border-radius: var(--2cy-r-wobble-b); }
+.k-panel:nth-child(3n) { border-radius: var(--2cy-r-wobble-c); }
+
+/* 对话气泡：她的发言与权限请求 */
+.k-bubble {
+  background: var(--2cy-paper);
+  color: var(--2cy-ink);
+  font-family: var(--2cy-font-title);
+  border: 2px solid var(--2cy-ink);
+  border-radius: var(--2cy-r-bubble);
+  padding: 10px 20px 12px;
+  position: relative;
+}
+.k-bubble::after { /* 气泡尾巴 */
+  content: '';
+  position: absolute;
+  left: 28px; bottom: -12px;
+  width: 14px; height: 14px;
+  background: var(--2cy-paper);
+  border-right: 2px solid var(--2cy-ink);
+  border-bottom: 2px solid var(--2cy-ink);
+  transform: skewX(30deg) rotate(45deg);
+}
+
+/* 朱红印章按钮：权限审批「准 / 全权委托 / 不行」 */
+.k-seal {
+  font-family: var(--2cy-font-headline);
+  letter-spacing: 0.18em;
+  color: var(--2cy-vermilion);
+  background: var(--2cy-vermilion-wash);
+  border: 2px solid var(--2cy-vermilion);
+  border-radius: var(--2cy-r-seal);
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: transform 80ms ease;
+}
+.k-seal:hover { transform: rotate(-2deg) scale(1.04); }
+.k-seal:active { transform: rotate(-2deg) scale(0.96); }
+.k-seal--deny { color: var(--2cy-ink-soft); border-color: var(--2cy-ink-soft); background: transparent; }
+
+/* 桌角便签：todo 列表 */
+.k-note {
+  background: var(--2cy-paper);
+  color: var(--2cy-ink-soft);
+  border: 1.5px solid var(--2cy-pencil);
+  border-radius: var(--2cy-r-wobble-tag);
+  padding: var(--2cy-pad-note);
+  font-family: var(--2cy-font-body);
+  font-size: 12.5px;
+}
+.k-note__item--done { text-decoration: line-through; color: var(--2cy-pencil); }
+
+/* 前情提要纸片：compaction 摘要 */
+.k-recap {
+  border: 1.5px dashed var(--2cy-pencil);
+  border-radius: var(--2cy-r-wobble-d);
+  color: var(--2cy-ink-faint);
+  padding: var(--2cy-pad-note);
+  font-family: var(--2cy-font-body);
+}
+.k-recap::before {
+  content: '前情提要';
+  font-family: var(--2cy-font-headline);
+  color: var(--2cy-vermilion);
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* 子代理小分镜：task 侧栏条目；灵魂色只给「她」相关的高亮 */
+.k-task { border-left: 3px solid var(--2cy-soul-cyan); padding-left: 10px; }
+.k-task--running { animation: k-breath 2.4s ease-in-out infinite; }
+@keyframes k-breath { 50% { border-color: var(--2cy-soul-cyan-deep); } }
