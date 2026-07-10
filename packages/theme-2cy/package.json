@@ -1,0 +1,8 @@
+{
+  "name": "@2cy/theme",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "2CY: 原稿桌设计系统——令牌与手绘墨线组件层",
+  "exports": { "./tokens.css": "./src/tokens.css", "./manuscript.css": "./src/manuscript.css" }
+}
