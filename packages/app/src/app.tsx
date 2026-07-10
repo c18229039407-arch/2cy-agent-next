@@ -8,6 +8,14 @@ import { File } from "@2cy/session-ui/file"
 import { Font } from "@2cy/ui/font"
 import { Splash } from "@2cy/ui/logo"
 import { ThemeProvider } from "@2cy/ui/theme/context"
+
+// 2CY: 一次性主题迁移 —— 老用户浏览器里存的上游默认主题(oc-1/oc-2)让位于原稿桌；
+// 用户之后在设置里的任何显式选择不再被打扰（键名与 ui 包 STORAGE_KEYS.THEME_ID 保持一致）
+if (typeof localStorage !== "undefined" && !localStorage.getItem("2cy-theme-migrated")) {
+  const cur = localStorage.getItem("opencode-theme-id")
+  if (!cur || cur === "oc-2" || cur === "oc-1") localStorage.setItem("opencode-theme-id", "2cy-manuscript")
+  localStorage.setItem("2cy-theme-migrated", "1")
+}
 import { MetaProvider } from "@solidjs/meta"
 import { type BaseRouterProps, Navigate, Route, Router, useNavigate, useParams, useSearchParams } from "@solidjs/router"
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query"

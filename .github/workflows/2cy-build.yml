@@ -39,6 +39,9 @@ jobs:
 
       - name: Build (embed web UI + compile)
         working-directory: packages/opencode
+        env: # 2CY: 标签构建走 2cy 通道并写入真实版本号（去除 DEV 角标）
+          OPENCODE_CHANNEL: ${{ startsWith(github.ref, 'refs/tags/') && '2cy' || 'dev' }}
+          OPENCODE_VERSION: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
         run: bun run build --single
 
       - name: Smoke test binary

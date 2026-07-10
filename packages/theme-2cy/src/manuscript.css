@@ -93,3 +93,14 @@
 .k-task { border-left: 3px solid var(--2cy-soul-cyan); padding-left: 10px; }
 .k-task--running { animation: k-breath 2.4s ease-in-out infinite; }
 @keyframes k-breath { 50% { border-color: var(--2cy-soul-cyan-deep); } }
+
+
+/* 2CY: 选中「2CY 原稿桌」主题时，方眼稿纸底纹直接铺在 body（上游会在 <html> 写 data-theme） */
+[data-theme="2cy-manuscript"] body {
+  background-color: var(--2cy-paper);
+  background-image:
+    linear-gradient(var(--2cy-manuscript-blue) 1px, transparent 1px),
+    linear-gradient(90deg, var(--2cy-manuscript-blue) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+}
