@@ -1,6 +1,6 @@
 import type { DesktopTheme } from "./types"
 // 2CY: 原稿桌主题注册（侵入点，见 2CY-FORK.md）
-import cy2ThemeJson from "./themes/2cy.json"
+import cy2ThemeJson from "./themes/2cy-manuscript.json"
 import oc2ThemeJson from "./themes/oc-2.json"
 import amoledThemeJson from "./themes/amoled.json"
 import auraThemeJson from "./themes/aura.json"

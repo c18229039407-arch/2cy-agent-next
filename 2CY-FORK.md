@@ -17,7 +17,8 @@
 3. `packages/opencode/src/session/system.ts` —— system prompt 组装链插入 `<persona>` 与 `<memory>` 区块；
 4. `packages/app/src/i18n` —— 中文文案与术语表；
 5. `packages/opencode/src/plugin/index.ts` 的 `internalPlugins` 列表 —— 挂载 2CY 内置插件（当前：`@2cy/memory`、`@2cy/character`），使产品工具开箱即用；
-6. CLI 品牌字样 —— `index.ts` 的 scriptName 与 `cli/cmd/web.ts` 的启动横幅（体验层 2CY 化；LICENSE 与内部包名不动）。
+6. CLI 品牌字样 —— `index.ts` 的 scriptName 与 `cli/cmd/web.ts` 的启动横幅（体验层 2CY 化；LICENSE 与内部包名不动）；
+7. `server/shared/ui.ts` —— 铲除「界面代理到上游托管站」的回退（本地优先红线），改为：嵌入 UI > OPENCODE_WEB_UI_DIR 本地目录（开发用）> 明确 503 报错。
 
 要新开第六处侵入点？先在 issue 里论证为什么三个官方扩展点都不行。
 

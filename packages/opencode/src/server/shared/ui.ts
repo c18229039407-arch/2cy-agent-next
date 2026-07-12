@@ -1,8 +1,8 @@
 import { FSUtil } from "@2cy/core/fs-util"
-import { Effect, Stream } from "effect"
-import { HttpBody, HttpClient, HttpClientRequest, HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
+import { Effect } from "effect"
+import { HttpClient, HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
 import { createHash } from "node:crypto"
-import { ProxyUtil } from "../proxy-util"
+import nodePath from "node:path" // 2CY
 
 let embeddedUIPromise: Promise<Record<string, string> | null> | undefined
 
@@ -19,22 +19,6 @@ export function themePreloadHash(body: string) {
 export function cspForHtml(body: string) {
   const match = themePreloadHash(body)
   return csp(match ? createHash("sha256").update(match[2]).digest("base64") : "")
-}
-
-function requestBody(request: HttpServerRequest.HttpServerRequest) {
-  if (request.method === "GET" || request.method === "HEAD") return HttpBody.empty
-  const len = request.headers["content-length"]
-  return HttpBody.stream(request.stream, request.headers["content-type"], len === undefined ? undefined : Number(len))
-}
-
-function proxyResponseHeaders(headers: Record<string, string>) {
-  const result = new Headers(headers)
-  // FetchHttpClient exposes decoded response bodies, so forwarding upstream
-  // transfer metadata makes browsers decode already-decoded assets again.
-  result.delete("content-encoding")
-  result.delete("content-length")
-  result.delete("transfer-encoding")
-  return result
 }
 
 export function upstreamURL(path: string) {
@@ -75,6 +59,21 @@ export function serveEmbeddedUIEffect(
   )
 }
 
+// 2CY: 本地优先（侵入点 7，见 2CY-FORK.md）——界面绝不代理到上游服务器。
+// 优先级：嵌入 UI > OPENCODE_WEB_UI_DIR 本地目录（开发/测试用）> 明确报错。
+function serveLocalDirEffect(requestPath: string, fs: FSUtil.Interface, dir: string) {
+  const rel = nodePath.normalize(requestPath.replace(/^\/+/, "") || "index.html")
+  if (rel.startsWith("..")) return Effect.succeed(notFound())
+  const primary = nodePath.join(dir, rel)
+  const fallback = nodePath.join(dir, "index.html")
+  const read = (file: string) => fs.readFile(file).pipe(Effect.map((body) => embeddedUIResponse(file, body)))
+  return read(primary).pipe(
+    Effect.catchReason("PlatformError", "NotFound", () =>
+      read(fallback).pipe(Effect.catchReason("PlatformError", "NotFound", () => Effect.succeed(notFound()))),
+    ),
+  )
+}
+
 export function serveUIEffect(
   request: HttpServerRequest.HttpServerRequest,
   services: { fs: FSUtil.Interface; client: HttpClient.HttpClient; disableEmbeddedWebUi: boolean },
@@ -85,24 +84,12 @@ export function serveUIEffect(
 
     if (embeddedWebUI) return yield* serveEmbeddedUIEffect(path, services.fs, embeddedWebUI)
 
-    const response = yield* services.client.execute(
-      HttpClientRequest.make(request.method)(upstreamURL(path), {
-        headers: ProxyUtil.headers(request.headers, { host: UI_UPSTREAM.host }),
-        body: requestBody(request),
-      }),
+    const localDir = process.env["OPENCODE_WEB_UI_DIR"]
+    if (localDir) return yield* serveLocalDirEffect(path, services.fs, localDir)
+
+    return HttpServerResponse.text(
+      "2CY web UI 未嵌入。请使用发布版二进制；开发时可设置 OPENCODE_WEB_UI_DIR 指向前端构建目录（packages/app/dist）。",
+      { status: 503 },
     )
-    const headers = proxyResponseHeaders(response.headers)
-
-    if (response.headers["content-type"]?.includes("text/html")) {
-      const body = yield* response.text
-      headers.set("Content-Security-Policy", cspForHtml(body))
-      return HttpServerResponse.text(body, { status: response.status, headers })
-    }
-
-    headers.set("Content-Security-Policy", csp())
-    return HttpServerResponse.stream(response.stream.pipe(Stream.catchCause(() => Stream.empty)), {
-      status: response.status,
-      headers,
-    })
   })
 }
