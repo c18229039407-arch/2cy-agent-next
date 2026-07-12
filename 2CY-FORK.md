@@ -58,3 +58,8 @@ MIT：保留上游 LICENSE 与版权声明；README 显著注明「基于 openco
 ## CI 工作流暂存说明（2026-07-09）
 
 `.github/workflows/` 已整体暂存：上游官方流水线在 `ci/upstream-workflows/`（fork 中不应原样运行——那是 opencode 官方的发布/测试流水线，缺少其 secrets，只会失败并消耗 Actions 配额）；2CY 自己的编译流水线在 `ci/2cy-build.yml`，激活方法见《上手指南.md》第二步。上游 rebase 时若 workflows 有更新，同步进暂存目录即可。
+
+
+## 界面皮肤的接线方式（2026-07-12 立）
+
+会话界面的原稿风（气泡、分镜格、便签、前情提要、印章、分身脊）**全部通过 `data-slot` / `data-component` 属性选择器在 `@2cy/theme` 的 CSS 里挂皮，不改任何上游组件代码**。好处：上游重构布局时，最坏情况是皮肤失效（外观回退为默认），绝不会撞坏功能，也不产生代码冲突。新增皮肤一律沿用此法。

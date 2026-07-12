@@ -117,3 +117,123 @@
   background-size: 24px 24px;
   background-position: -1px -1px;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   2CY 原稿桌 · 会话界面接线层（激进版）
+   全部经 data-slot / data-component 属性选择器挂皮，零组件改动 →
+   上游重构布局时最多失去皮肤，绝不会撞坏功能。
+   仅在选中「2CY 原稿桌」主题时生效。
+   ══════════════════════════════════════════════════════════════ */
+
+/* ① 她的话 = 手绘气泡（assistant 内容） */
+[data-theme="2cy-manuscript"] [data-slot="session-turn-assistant-content"] {
+  background: var(--2cy-paper);
+  border: 2px solid var(--2cy-ink);
+  border-radius: var(--2cy-r-bubble);
+  padding: 14px 20px 16px;
+  position: relative;
+  box-shadow: 2px 2px 0 var(--2cy-ink);
+}
+[data-theme="2cy-manuscript"] [data-slot="session-turn-assistant-content"]::after {
+  content: "";
+  position: absolute;
+  left: 26px;
+  bottom: -11px;
+  width: 13px;
+  height: 13px;
+  background: var(--2cy-paper);
+  border-right: 2px solid var(--2cy-ink);
+  border-bottom: 2px solid var(--2cy-ink);
+  transform: skewX(30deg) rotate(45deg);
+}
+
+/* ② 你的话 = 铅笔稿纸条（user 消息） */
+[data-theme="2cy-manuscript"] [data-component="user-message"] {
+  background: var(--2cy-paper);
+  border: 1.5px solid var(--2cy-pencil);
+  border-radius: var(--2cy-r-wobble-tag);
+  padding: 10px 16px 11px;
+}
+
+/* ③ 工具执行 = 分镜格（tool 卡片） */
+[data-theme="2cy-manuscript"] [data-component="tool-trigger"] {
+  background: var(--2cy-paper);
+  border: 2px solid var(--2cy-ink);
+  border-radius: var(--2cy-r-wobble-a);
+  box-shadow: 3px 3px 0 var(--2cy-ink);
+  padding: 10px 14px;
+}
+[data-theme="2cy-manuscript"] [data-component="tool-trigger"]:nth-of-type(2n) {
+  border-radius: var(--2cy-r-wobble-b);
+}
+[data-theme="2cy-manuscript"] [data-component="tool-trigger"]:nth-of-type(3n) {
+  border-radius: var(--2cy-r-wobble-c);
+}
+
+/* ④ 分身 = 小分镜（task 卡片，灵魂色左脊） */
+[data-theme="2cy-manuscript"] [data-component="task-tool-card"] {
+  border-left: 3px solid var(--2cy-soul-cyan);
+  border-radius: var(--2cy-r-wobble-d);
+  background: var(--2cy-paper);
+  padding-left: 12px;
+}
+
+/* ⑤ 前情提要 = 虚线纸片（compaction 摘要） */
+[data-theme="2cy-manuscript"] [data-slot="session-turn-compaction"] {
+  border: 1.5px dashed var(--2cy-pencil);
+  border-radius: var(--2cy-r-wobble-d);
+  color: var(--2cy-ink-faint);
+  padding: 12px 16px 14px;
+  background: var(--2cy-paper);
+}
+[data-theme="2cy-manuscript"] [data-slot="session-turn-compaction"]::before {
+  content: "前情提要";
+  display: block;
+  font-family: var(--2cy-font-headline);
+  color: var(--2cy-vermilion);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* ⑥ 权限请求 = 她举着印章开口（dock 面板 + 头部气泡语气） */
+[data-theme="2cy-manuscript"] [data-slot="permission-body"],
+[data-theme="2cy-manuscript"] [data-slot="permission-content"] {
+  background: var(--2cy-paper);
+  border-radius: var(--2cy-r-wobble-a);
+}
+[data-theme="2cy-manuscript"] [data-slot="permission-header-title"] {
+  font-family: var(--2cy-font-headline);
+  color: var(--2cy-vermilion);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+}
+[data-theme="2cy-manuscript"] [data-slot="permission-icon"] {
+  color: var(--2cy-vermilion);
+}
+[data-theme="2cy-manuscript"] [data-slot="permission-footer-actions"] {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ⑦ 桌角便签 = todo 列表（手写便签纸 + 已完成划线） */
+[data-theme="2cy-manuscript"] [data-component="todos"] {
+  background: var(--2cy-paper);
+  border: 1.5px solid var(--2cy-pencil);
+  border-radius: var(--2cy-r-wobble-tag);
+  padding: 13px 16px 14px;
+  position: relative;
+}
+[data-theme="2cy-manuscript"] [data-component="todos"]::before {
+  content: "桌角便签";
+  display: block;
+  font-family: var(--2cy-font-headline);
+  color: var(--2cy-vermilion);
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+[data-theme="2cy-manuscript"] [data-slot="message-part-todo-content"][data-completed] {
+  text-decoration: line-through;
+  color: var(--2cy-pencil);
+}
