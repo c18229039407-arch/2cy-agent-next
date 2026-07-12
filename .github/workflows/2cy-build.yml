@@ -38,6 +38,8 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Typecheck
+        if: runner.os == 'Linux' # 2CY: 类型检查与平台无关，只在最快的 Linux 跑一次；
+                                 # 在 macOS runner 上全量 typecheck 会耗时 15 分钟以上并拖垮发布。
         run: bun turbo typecheck
 
       - name: Build (embed web UI + compile)
@@ -45,6 +47,8 @@ jobs:
         env: # 2CY: 标签构建走 2cy 通道并写入真实版本号（去除 DEV 角标）
           OPENCODE_CHANNEL: ${{ startsWith(github.ref, 'refs/tags/') && '2cy' || 'dev' }}
           OPENCODE_VERSION: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
+          # 2CY: 前端读的是 VITE_ 前缀；不设它，发布版左上角会一直挂「DEV」角标
+          VITE_OPENCODE_CHANNEL: ${{ startsWith(github.ref, 'refs/tags/') && 'prod' || 'dev' }}
         run: bun run build --single || bun run build --single # 2CY: Windows runner 偶发 0xC0000142，重试一次
 
       - name: Smoke test binary

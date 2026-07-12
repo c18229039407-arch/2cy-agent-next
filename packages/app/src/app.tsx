@@ -14,6 +14,8 @@ import { ThemeProvider } from "@2cy/ui/theme/context"
 if (typeof localStorage !== "undefined" && !localStorage.getItem("2cy-theme-migrated")) {
   const cur = localStorage.getItem("opencode-theme-id")
   if (!cur || cur === "oc-2" || cur === "oc-1") localStorage.setItem("opencode-theme-id", "2cy-manuscript")
+  // 原稿桌是一张白纸：首次启动默认亮色，暗色（夜稿）留给用户主动选择
+  if (!localStorage.getItem("opencode-color-scheme")) localStorage.setItem("opencode-color-scheme", "light")
   localStorage.setItem("2cy-theme-migrated", "1")
 }
 import { MetaProvider } from "@solidjs/meta"

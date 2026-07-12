@@ -237,3 +237,32 @@
   text-decoration: line-through;
   color: var(--2cy-pencil);
 }
+
+/* ⑧ 首屏欢迎（她的开场白 + 三步引导） */
+[data-theme="2cy-manuscript"] [data-slot="2cy-welcome"] {
+  max-width: 420px;
+  gap: 18px;
+}
+[data-theme="2cy-manuscript"] [data-slot="2cy-welcome-mark"] {
+  font-family: var(--2cy-font-display);
+  font-size: 19px;
+  letter-spacing: 0.04em;
+  color: var(--2cy-ink);
+  border-bottom: 2px solid var(--2cy-vermilion);
+  padding-bottom: 6px;
+}
+[data-theme="2cy-manuscript"] [data-slot="2cy-welcome-bubble"] {
+  font-size: 14px;
+  line-height: 1.7;
+  text-align: left;
+}
+[data-theme="2cy-manuscript"] [data-slot="2cy-welcome-steps"] {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font-size: 13px;
+  line-height: 2;
+  color: var(--2cy-ink-soft);
+  font-family: var(--2cy-font-body);
+}

@@ -1471,14 +1471,17 @@ function HomeSessionsEmpty(props: { onNewSession?: () => void }) {
   const language = useLanguage()
   return (
     <div class="flex min-h-full flex-col items-center gap-4 px-6 pt-[52px] text-center">
-      {/* 2CY: 空态包一张墨线分镜格 */}
-      <div class="k-panel flex flex-col items-center gap-3 px-8 py-7">
-        <div class="shrink-0 text-[15px] leading-[15px] tracking-[-0.04px] text-v2-text-text-base [font-weight:700]">
-          {language.t("home.sessions.empty")}
+      {/* 2CY: 空态 = 她的开场白 + 三步上手引导 */}
+      <div data-slot="2cy-welcome" class="k-panel flex flex-col items-center gap-4 px-9 py-8">
+        <div data-slot="2cy-welcome-mark">2CY Agent · 原稿桌</div>
+        <div class="k-bubble" data-slot="2cy-welcome-bubble">
+          {language.t("home.sessions.empty.greeting")}
         </div>
-        <p class="mb-1 text-center text-[13px] leading-5 tracking-[-0.04px] text-v2-text-text-muted [font-weight:440]">
-          {language.t("home.sessions.empty.description")}
-        </p>
+        <ol data-slot="2cy-welcome-steps">
+          <li>{language.t("home.sessions.empty.step1")}</li>
+          <li>{language.t("home.sessions.empty.step2")}</li>
+          <li>{language.t("home.sessions.empty.step3")}</li>
+        </ol>
         <Show when={props.onNewSession}>
           {(onNewSession) => (
             <ButtonV2 data-action="home-new-session" variant="neutral" size="normal" icon="edit" onClick={onNewSession()}>
