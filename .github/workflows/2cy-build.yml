@@ -1,5 +1,5 @@
 # 2CY: 三平台编译产物 —— Phase 0 验收标准：本工作流全绿并产出可运行二进制。
-# 复用上游官方构建脚本（packages/opencode/script/build.ts，含 web UI 嵌入与 bun compile），
+# 复用上游官方构建脚本（packages/2cy/script/build.ts，含 web UI 嵌入与 bun compile），
 # 我们只负责触发与收集产物，不自造构建逻辑。
 name: 2cy-build
 on:
@@ -43,7 +43,7 @@ jobs:
         run: bun turbo typecheck
 
       - name: Build (embed web UI + compile)
-        working-directory: packages/opencode
+        working-directory: packages/2cy
         env: # 2CY: 标签构建走 2cy 通道并写入真实版本号（去除 DEV 角标）
           OPENCODE_CHANNEL: ${{ startsWith(github.ref, 'refs/tags/') && '2cy' || 'dev' }}
           OPENCODE_VERSION: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
@@ -53,19 +53,19 @@ jobs:
 
       - name: Smoke test binary
         if: runner.os != 'Windows'
-        working-directory: packages/opencode
+        working-directory: packages/2cy
         run: ./dist/*/bin/2cy --version
 
       - uses: actions/upload-artifact@v4
         with:
           name: 2CY-Agent-${{ matrix.label }}
-          path: packages/opencode/dist/
+          path: packages/2cy/dist/
           retention-days: 14
 
       # ---- 2CY: 以下步骤仅在推送 v* 标签时执行，产出正式 Release ----
       - name: Pack release (unix)
         if: startsWith(github.ref, 'refs/tags/') && runner.os != 'Windows'
-        working-directory: packages/opencode
+        working-directory: packages/2cy
         run: |
           mkdir -p pkg/bin
           cp dist/*/bin/2cy pkg/bin/2cy
@@ -84,7 +84,7 @@ jobs:
 
       - name: Pack release (windows)
         if: startsWith(github.ref, 'refs/tags/') && runner.os == 'Windows'
-        working-directory: packages/opencode
+        working-directory: packages/2cy
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path pkg/bin | Out-Null
@@ -97,7 +97,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: packages/opencode/2CY-Agent-*.zip
+          files: packages/2cy/2CY-Agent-*.zip
           name: 2CY Agent ${{ github.ref_name }}
           body: |
             ## 下载哪个？

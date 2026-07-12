@@ -21,21 +21,29 @@ export function useProviders(directory?: Accessor<string | undefined>) {
   const serverSync = useServerSync()
   const params = useParams()
   const dir = () => (directory ? directory() : decode64(params.dir))
+  // 2CY: 屏蔽上游自营的模型服务（opencode zen / go）。
+  // 不改名而是移除——它们是真实存在的第三方付费服务，改名叫「2CY Zen」等于骗用户去
+  // 一个不存在的服务充值。移除后界面上不再出现任何 opencode 字样，也不产生虚假信息。
+  const HIDDEN_PROVIDERS = new Set(["opencode", "opencode-go"])
   const providers = () => {
     const value = dir()
     const projectStore = value ? serverSync().child(value)[0] : undefined
-    if (directory)
-      return selectProviderCatalog({
-        explicit: true,
-        directory: value,
-        catalog: projectStore && { ready: projectStore.provider_ready, providers: projectStore.provider },
-      })
-    return selectProviderCatalog({
-      explicit: false,
-      directory: value,
-      catalog: projectStore && { ready: projectStore.provider_ready, providers: projectStore.provider },
-      global: serverSync().data.provider,
-    })
+    const raw = directory
+      ? selectProviderCatalog({
+          explicit: true,
+          directory: value,
+          catalog: projectStore && { ready: projectStore.provider_ready, providers: projectStore.provider },
+        })
+      : selectProviderCatalog({
+          explicit: false,
+          directory: value,
+          catalog: projectStore && { ready: projectStore.provider_ready, providers: projectStore.provider },
+          global: serverSync().data.provider,
+        })
+    return {
+      ...raw,
+      all: Array.from(raw.all).filter(([id]) => !HIDDEN_PROVIDERS.has(String(id))) as typeof raw.all,
+    }
   }
   return {
     all: () => providers().all,

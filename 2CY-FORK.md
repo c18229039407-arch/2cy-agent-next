@@ -14,9 +14,9 @@
 
 1. `packages/app` 路由/布局 —— 挂载角色面板、审批印章、便签等 2CY 组件；
 2. `packages/server` 路由 —— 挂载 character / memory 的 HTTP 端点；
-3. `packages/opencode/src/session/system.ts` —— system prompt 组装链插入 `<persona>` 与 `<memory>` 区块；
+3. `packages/2cy/src/session/system.ts` —— system prompt 组装链插入 `<persona>` 与 `<memory>` 区块；
 4. `packages/app/src/i18n` —— 中文文案与术语表；
-5. `packages/opencode/src/plugin/index.ts` 的 `internalPlugins` 列表 —— 挂载 2CY 内置插件（当前：`@2cy/memory`、`@2cy/character`），使产品工具开箱即用；
+5. `packages/2cy/src/plugin/index.ts` 的 `internalPlugins` 列表 —— 挂载 2CY 内置插件（当前：`@2cy/memory`、`@2cy/character`），使产品工具开箱即用；
 6. CLI 品牌字样 —— `index.ts` 的 scriptName 与 `cli/cmd/web.ts` 的启动横幅（体验层 2CY 化；LICENSE 与内部包名不动）；
 7. `server/shared/ui.ts` —— 铲除「界面代理到上游托管站」的回退（本地优先红线），改为：嵌入 UI > OPENCODE_WEB_UI_DIR 本地目录（开发用）> 明确 503 报错。
 
@@ -28,7 +28,7 @@
 git remote add upstream https://github.com/anomalyco/opencode.git   # 仅首次
 git fetch upstream
 git rebase upstream/dev        # 我们的提交历史应当短而干净，rebase 而非 merge
-grep -rn "2CY:" packages/app packages/server packages/opencode | wc -l   # 核对侵入点是否全部存活
+grep -rn "2CY:" packages/app packages/server packages/2cy | wc -l   # 核对侵入点是否全部存活
 bun install && bun turbo typecheck && bun test                       # 全绿才算完成同步
 ```
 
