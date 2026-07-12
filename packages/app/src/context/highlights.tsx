@@ -7,7 +7,7 @@ import { useSettings } from "@/context/settings"
 import { persisted } from "@/utils/persist"
 import { DialogReleaseNotes, type Highlight } from "@/components/dialog-release-notes"
 
-const CHANGELOG_URL = "https://opencode.ai/changelog.json"
+const CHANGELOG_URL = "" // 2CY: 不联网拉取上游更新日志（本地优先红线）
 
 type Store = {
   version?: string
@@ -176,6 +176,9 @@ export const { use: useHighlights, provider: HighlightsProvider } = createSimple
         controller.abort()
         clearTimer()
       })
+
+      // 2CY: 未配置更新日志地址时直接跳过，不发任何网络请求
+      if (!CHANGELOG_URL) return
 
       fetcher(CHANGELOG_URL, {
         signal: controller.signal,

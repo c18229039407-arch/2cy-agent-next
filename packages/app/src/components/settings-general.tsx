@@ -452,7 +452,7 @@ export const SettingsGeneral: Component = () => {
           description={
             <>
               {language.t("settings.general.row.theme.description")}{" "}
-              <Link href="https://opencode.ai/docs/themes/">{language.t("common.learnMore")}</Link>
+              <Link href="https://github.com/c18229039407-arch/2cy-agent-next#readme">{language.t("common.learnMore")}</Link>
             </>
           }
         >

@@ -334,3 +334,36 @@
   text-overflow: ellipsis;
   max-width: 150px;
 }
+
+/* ⑪ 输入框 = 摊开的稿纸（工具条显形） */
+[data-theme="2cy-manuscript"] [data-component="prompt-input"],
+[data-theme="2cy-manuscript"] [data-slot="prompt-input"] {
+  border: 2px solid var(--2cy-ink);
+  border-radius: var(--2cy-r-wobble-a);
+  background: var(--2cy-paper);
+  box-shadow: 2px 2px 0 var(--2cy-ink);
+}
+/* 输入框下方的控件（模型选择器等）做成手绘小标签，让它们「看得见」 */
+[data-theme="2cy-manuscript"] [data-slot="prompt-input-footer"] button,
+[data-theme="2cy-manuscript"] [data-slot="prompt-input-controls"] button {
+  border: 1.5px solid var(--2cy-pencil);
+  border-radius: var(--2cy-r-seal);
+  color: var(--2cy-ink-soft);
+  font-size: 12px;
+}
+[data-theme="2cy-manuscript"] [data-slot="prompt-input-footer"] button:hover,
+[data-theme="2cy-manuscript"] [data-slot="prompt-input-controls"] button:hover {
+  border-color: var(--2cy-vermilion);
+  color: var(--2cy-vermilion);
+}
+
+/* ⑫ 会话列表条目 = 一格格分镜 */
+[data-theme="2cy-manuscript"] [data-slot="home-session-row"],
+[data-theme="2cy-manuscript"] [data-component="session-row"] {
+  border-bottom: 1.5px solid var(--2cy-manuscript-blue);
+  border-radius: 0;
+}
+[data-theme="2cy-manuscript"] [data-slot="home-session-row"]:hover,
+[data-theme="2cy-manuscript"] [data-component="session-row"]:hover {
+  background: var(--2cy-vermilion-wash);
+}

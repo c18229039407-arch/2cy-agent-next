@@ -430,7 +430,7 @@ export const SettingsGeneralV2: Component<{
           description={
             <>
               {language.t("settings.general.row.theme.description")}{" "}
-              <Link class="settings-v2-link" href="https://opencode.ai/docs/themes/">
+              <Link class="settings-v2-link" href="https://github.com/c18229039407-arch/2cy-agent-next#readme">
                 {language.t("common.learnMore")}
               </Link>
             </>
