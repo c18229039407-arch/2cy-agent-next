@@ -191,6 +191,17 @@ const docRoute = HttpRouter.use((router) => router.add("GET", "/doc", () => Effe
   Layer.provide(authOnlyRouterLayer),
 )
 
+// 2CY: 角色卡只读接口（侵入点 8）——供前端侧栏常驻人设卡使用。
+// 只读、无副作用；无卡片时返回 null，前端据此隐藏面板。
+const characterRoute = HttpRouter.use((router) =>
+  router.add("GET", "/2cy/character", () =>
+    Effect.promise(async () => {
+      const { readCard } = await import("@2cy/character/read")
+      return HttpServerResponse.jsonUnsafe(await readCard())
+    }),
+  ),
+).pipe(Layer.provide(authOnlyRouterLayer))
+
 const uiRoute = HttpRouter.use((router) =>
   Effect.gen(function* () {
     const fs = yield* FSUtil.Service
@@ -280,6 +291,7 @@ export function createRoutes(
     instanceRoutes,
     serverRoutes,
     docRoute,
+    characterRoute, // 2CY
     uiRoute,
   ).pipe(
     Layer.provide([

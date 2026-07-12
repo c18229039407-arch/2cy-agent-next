@@ -27,6 +27,7 @@ import { Icon as IconV2 } from "@2cy/ui/v2/icon"
 import { IconButtonV2 } from "@2cy/ui/v2/icon-button-v2"
 import { MenuV2 } from "@2cy/ui/v2/menu-v2"
 import { TooltipV2 } from "@2cy/ui/v2/tooltip-v2"
+import { CharacterCardPanel } from "@/components/2cy-character-card" // 2CY
 import { getProjectAvatarVariant, useLayout, type HomeProjectSelection, type LocalProject } from "@/context/layout"
 import { useNavigate } from "@solidjs/router"
 import { base64Encode } from "@2cy/core/util/encode"
@@ -794,6 +795,8 @@ function HomeUtilityNav(props: {
 }) {
   return (
     <div class={`${props.class ?? ""} min-w-0 flex-col gap-1`}>
+      {/* 2CY: 她的人设卡常驻侧栏 */}
+      <CharacterCardPanel />
       <button
         type="button"
         class={`${HOME_PROJECT_NAV_ROW} text-v2-text-text-faint [&>[data-slot=icon-svg]]:text-v2-icon-icon-muted`}

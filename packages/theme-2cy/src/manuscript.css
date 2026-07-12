@@ -266,3 +266,71 @@
   color: var(--2cy-ink-soft);
   font-family: var(--2cy-font-body);
 }
+
+/* ══════════ ⑨ 聊天式布局（参考通用 AI 聊天界面） ══════════ */
+
+/* 你的话靠右，像发出去的消息 */
+[data-theme="2cy-manuscript"] [data-component="user-message"] {
+  margin-left: auto;
+  margin-right: 0;
+  max-width: 76%;
+  width: fit-content;
+  background: var(--2cy-vermilion-wash);
+  border-color: var(--2cy-vermilion);
+  text-align: left;
+}
+
+/* 她的话靠左，气泡带尖角 */
+[data-theme="2cy-manuscript"] [data-slot="session-turn-assistant-content"] {
+  margin-right: auto;
+  max-width: 88%;
+}
+
+/* ⑩ 侧栏常驻人设卡 */
+[data-theme="2cy-manuscript"] [data-slot="2cy-character-card"],
+[data-slot="2cy-character-card"] {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 2px solid var(--2cy-ink, #1a1a1f);
+  border-radius: var(--2cy-r-wobble-tag, 10px);
+  background: var(--2cy-paper, #fff);
+}
+[data-slot="2cy-character-avatar"] {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--2cy-ink, #1a1a1f);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--2cy-font-display);
+  font-size: 18px;
+  background: var(--2cy-vermilion-wash);
+  color: var(--2cy-vermilion);
+}
+[data-slot="2cy-character-meta"] { min-width: 0; }
+[data-slot="2cy-character-name"] {
+  font-family: var(--2cy-font-title);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--2cy-ink, #1a1a1f);
+  line-height: 1.3;
+}
+[data-slot="2cy-character-source"] {
+  font-size: 11px;
+  color: var(--2cy-vermilion);
+  line-height: 1.4;
+}
+[data-slot="2cy-character-line"] {
+  font-size: 11.5px;
+  color: var(--2cy-ink-faint, #636363);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}

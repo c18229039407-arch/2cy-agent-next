@@ -5,7 +5,8 @@
   "type": "module",
   "description": "2CY: 角色卡与人设外壳——persona 编译、.2cy.json 兼容导入导出",
   "exports": {
-    "./*": "./src/*.ts"
+    "./*": "./src/*.ts",
+    "./read": "./src/read.ts"
   },
   "dependencies": {
     "zod": "catalog:",
