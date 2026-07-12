@@ -17,12 +17,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            target: linux-x64
-          - os: macos-latest
-            target: darwin-arm64
           - os: windows-latest
             target: windows-x64
+            label: Windows # 2CY: 资产名用人话
+          - os: macos-latest
+            target: darwin-arm64
+            label: Mac-AppleSilicon
+          - os: ubuntu-latest
+            target: linux-x64
+            label: Linux
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +45,7 @@ jobs:
         env: # 2CY: 标签构建走 2cy 通道并写入真实版本号（去除 DEV 角标）
           OPENCODE_CHANNEL: ${{ startsWith(github.ref, 'refs/tags/') && '2cy' || 'dev' }}
           OPENCODE_VERSION: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
-        run: bun run build --single
+        run: bun run build --single || bun run build --single # 2CY: Windows runner 偶发 0xC0000142，重试一次
 
       - name: Smoke test binary
         if: runner.os != 'Windows'
@@ -51,7 +54,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: 2cy-agent-${{ matrix.target }}
+          name: 2CY-Agent-${{ matrix.label }}
           path: packages/opencode/dist/
           retention-days: 14
 
@@ -73,7 +76,7 @@ jobs:
           else
             cp ../../release/启动-2CY.sh pkg/
           fi
-          cd pkg && zip -r ../2cy-agent-${{ matrix.target }}-${{ github.ref_name }}.zip .
+          cd pkg && zip -r ../2CY-Agent-${{ matrix.label }}-${{ github.ref_name }}.zip .
 
       - name: Pack release (windows)
         if: startsWith(github.ref, 'refs/tags/') && runner.os == 'Windows'
@@ -84,15 +87,30 @@ jobs:
           Copy-Item dist/*/bin/2cy.exe pkg/bin/2cy.exe
           Copy-Item ../../release/使用说明.txt pkg/
           Copy-Item ../../release/启动-2CY.bat pkg/
-          Compress-Archive -Path pkg/* -DestinationPath 2cy-agent-${{ matrix.target }}-${{ github.ref_name }}.zip
+          Compress-Archive -Path pkg/* -DestinationPath 2CY-Agent-${{ matrix.label }}-${{ github.ref_name }}.zip
 
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: packages/opencode/2cy-agent-*.zip
+          files: packages/opencode/2CY-Agent-*.zip
           name: 2CY Agent ${{ github.ref_name }}
-          body: "下载对应平台的 zip，解压后按「使用说明.txt」启动。Windows 会有 SmartScreen 提示、macOS 需右键打开（未签名所致，Phase 4 处理）。"
+          body: |
+            ## 下载哪个？
+
+            | 你的电脑 | 下载这个 |
+            |---|---|
+            | **Windows** | `2CY-Agent-Windows-*.zip` |
+            | **Mac**（M1/M2/M3/M4 芯片） | `2CY-Agent-Mac-AppleSilicon-*.zip` |
+            | **Linux** | `2CY-Agent-Linux-*.zip` |
+
+            解压后按里面的《使用说明.txt》启动。
+
+            ⚠️ **首次启动会被系统拦一下**（本程序未购买代码签名/公证证书）：
+            - Windows：SmartScreen 提示 → 点「更多信息」→「仍要运行」
+            - Mac：**右键**点启动脚本 → 「打开」（不要双击）
+
+            程序完全在你本机运行，不与任何服务器通信（你自己配置的模型 API 除外）。
           draft: false
 
 # TODO(Phase 4): macOS 签名+公证（需 Apple 开发者证书 secrets）、Windows 代码签名、
