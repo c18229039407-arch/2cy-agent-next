@@ -47,7 +47,7 @@ export function SessionPermissionDock(props: {
             <Button
               variant="secondary"
               size="normal"
-              class="k-seal"
+              class="k-seal k-seal--always"
               onClick={() => props.onDecide("always")}
               disabled={props.responding}
             >
