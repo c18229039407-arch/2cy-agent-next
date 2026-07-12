@@ -63,7 +63,16 @@ jobs:
           mkdir -p pkg/bin
           cp dist/*/bin/2cy pkg/bin/2cy
           cp ../../release/使用说明.txt pkg/
-          if [ "${{ runner.os }}" = "macOS" ]; then cp ../../release/启动-2CY.command pkg/; else cp ../../release/启动-2CY.sh pkg/; fi
+          if [ "${{ runner.os }}" = "macOS" ]; then
+            cp ../../release/启动-2CY.command pkg/
+            # 2CY: ad-hoc 临时签名。未购买 Apple 公证（$99/年）的前提下，
+            # 这一步让 macOS 不再把二进制判为「已损坏」直接 SIGKILL，
+            # 用户得以走到「仍要打开」放行界面。零成本，唯一可行的补救。
+            codesign --force --deep --sign - pkg/bin/2cy
+            codesign --verify --verbose pkg/bin/2cy || true
+          else
+            cp ../../release/启动-2CY.sh pkg/
+          fi
           cd pkg && zip -r ../2cy-agent-${{ matrix.target }}-${{ github.ref_name }}.zip .
 
       - name: Pack release (windows)
